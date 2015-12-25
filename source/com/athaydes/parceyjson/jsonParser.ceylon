@@ -43,8 +43,13 @@ shared abstract class Value<Type>(shared Type val)
 shared alias JsonEntry => Entry<String, JsonElement>;
 
 shared class JsonObject({JsonEntry*} entries)
-        extends Value<JsonEntry[]>(entries.sequence()) {
+		extends Value<Map<String, JsonElement>>(map(entries))
+		satisfies Correspondence<String, JsonElement> {	
     string => val.string;
+    
+    shared actual Boolean defines(String key) => val.defines(key);
+    
+    shared actual JsonElement? get(String key) => val.get(key);
 }
 
 shared interface JsonNull of jsonNull {}
